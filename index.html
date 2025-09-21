@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mükemmel Gününüzü Planlayın</title>
+<meta name="description" content="Hızlı anket ve kategoriye özel risk analizi.">
+<style>
+:root{
+  --bg1:#fbfeff; --bg2:#f6fbff; --bg3:#fff8f4;
+  --panel:#ffffff; --text:#0f172a; --muted:#6b7280; --line:#e5e7eb;
+  --ok:#22c55e; --warn:#f59e0b; --critical:#ef4444; --mid:#eab308;
+  --brand:#22c55e; --brandHover:#16a34a;
+  --radius:14px; --btnRadius:999px; --container:940px; --shadow:0 8px 24px #0002;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial; color:var(--text);
+  background:
+    radial-gradient(1200px 500px at -5% -10%, var(--bg3) 0, transparent 60%),
+    radial-gradient(900px 400px at 110% -10%, var(--bg2) 0, transparent 60%),
+    linear-gradient(180deg, var(--bg1), #ffffff);
+}
+.container{max-width:var(--container);margin:0 auto;padding:22px}
+h1{margin:0 0 12px;text-align:center}
+h2{margin:0 0 10px}
+.muted{color:var(--muted)}
+.lead{font-size:20px; line-height:1.5}               /* ↑ крупнее приветственный текст */
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
+.question{margin:18px 0}
+.choices{display:grid;grid-template-columns:1fr;gap:8px}
+.btn{display:inline-block;width:100%;padding:12px 18px;border:none;border-radius:var(--btnRadius);background:var(--brand);color:#fff;font-weight:700;text-align:center;cursor:pointer;text-decoration:none;margin:6px 0}
+.btn:hover{background:var(--brandHover)}
+.btn.ghost{background:var(--line);color:var(--text)}
+.btn.selected{outline:2px solid #16a34a;background:#16a34a}
+.btn-lg{padding:16px 22px; font-size:18px}           /* ↑ большая кнопка Başla */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:16px 0}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#22c55e,#86efac)}
+#quiz{display:none} #result{display:none}
+
+/* === ПРОГРЕСС-БАРЫ вместо диаграммы === */
+.meters{display:grid;gap:12px;margin:12px 0}
+.meter-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
+.meter-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.meter-title{font-weight:700}
+.meter-badge{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+.meter{height:12px;background:#f3f4f6;border-radius:999px;overflow:hidden;position:relative}
+.meter-fill{height:100%;width:0%;border-radius:999px;transition:width .5s ease}
+.meter-note{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* легенда (простая) */
+.legend{display:flex;gap:12px;align-items:center;justify-content:center;font-size:12px;color:var(--muted);margin-top:8px}
+.dot{width:10px;height:10px;border-radius:50%}
+
+.cta{text-align:center;margin:18px 0;padding:16px;border:1px solid var(--line);border-radius:var(--radius)}
+.cta h3.big{font-size:26px;line-height:1.2;font-weight:900;margin:0 0 8px}
+.tooltip{position:fixed;pointer-events:none;background:#000;color:#fff;font-size:12px;padding:6px 8px;border-radius:8px;opacity:0;transform:translateY(-6px);transition:.12s;z-index:10}
+.note{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
+.badge.red{background:#fee2e2;color:#991b1b}
+.badge.orange{background:#ffedd5;color:#9a3412}
+.badge.yellow{background:#fef9c3;color:#854d0e}
+.badge.green{background:#dcfce7;color:#166534}
+.hr{height:1px;background:var(--line);margin:10px 0}
+.share-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.share-list a{display:inline-block;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#0f172a;text-decoration:none;font-size:14px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Mükemmel Gününüzü Planlayın</h1>
+
+  <div id="welcome" class="panel">
+    <h2>Hoş Geldiniz!</h2>
+    <img src="hero.png" alt="Eğitmen" class="hero">
+    <p class="muted lead">Kısa sorularla sizin için ideal günlük rutini oluşturalım.</p>
+
+    <!-- Большая кнопка -->
+    <button class="btn btn-lg" onclick="startQuiz()">Başla</button>
+
+    <!-- Вторая строка: Telegram + Paylaş -->
+    <div class="row2">
+      <a class="btn ghost"
+         href="https://t.me/health_yasam_bot?start=from_site_home"
+         target="_blank" rel="noopener">Telegram’da kayıt ve ödeme</a>
+
+      <button id="shareBtn" class="btn ghost" type="button">Paylaş</button>
+    </div>
+    <div id="shareBox" class="share-list" style="display:none"></div>
+  </div>
+
+  <div id="progressWrap" style="display:none">
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <p class="muted" style="text-align:right;margin:0">İlerleme: <span id="pct">0%</span></p>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz">
+    <div class="question panel" id="q1">
+      <h2>Yaşınız nedir?</h2>
+      <div class="choices"><button class="btn">18-25</button><button class="btn">26-35</button><button class="btn">36-45</button><button class="btn">46+</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q2" style="display:none">
+      <h2>Cinsiyetiniz nedir?</h2>
+      <div class="choices"><button class="btn">Kadın</button><button class="btn">Erkek</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q3" style="display:none">
+      <h2>Uyku saatiniz?</h2>
+      <div class="choices"><button class="btn">22:00</button><button class="btn">23:00</button><button class="btn">00:00</button><button class="btn">01:00</button><button class="btn">02:00</button><button class="btn">03:00</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q4" style="display:none">
+      <h2>Sabah kalkma süreniz?</h2>
+      <div class="choices"><button class="btn">10 dk</button><button class="btn">20 dk</button><button class="btn">30 dk</button><button class="btn">30+ dk</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <!-- q5 УДАЛЕН -->
+
+    <div class="question panel" id="q6" style="display:none">
+      <h2>Enerji durumunuz?</h2>
+      <div class="choices"><button class="btn">Yüksek</button><button class="btn">Orta</button><button class="btn">Düşük</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q7" style="display:none">
+      <h2>Su tüketiminiz?</h2>
+      <div class="choices"><button class="btn">1 litreden az</button><button class="btn">1-2 litre</button><button class="btn">2-3 litre</button><button class="btn">3+ litre</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q8" style="display:none">
+      <h2>Hareket düzeyiniz?</h2>
+      <div class="choices"><button class="btn">Düşük</button><button class="btn">Orta</button><button class="btn">Yüksek</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q9" style="display:none">
+      <h2>Öğün sayınız?</h2>
+      <div class="choices"><button class="btn">2 öğün</button><button class="btn">3 öğün</button><button class="btn">4+ öğün</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q10" style="display:none">
+      <h2>Tatlı/atıştırmalık?</h2>
+      <div class="choices"><button class="btn">Neredeyse hiç</button><button class="btn">Haftada birkaç kez</button><button class="btn">Her gün</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q11" style="display:none">
+      <h2>Stres seviyeniz?</h2>
+      <div class="choices"><button class="btn">Düşük</button><button class="btn">Orta</button><button class="btn">Yüksek</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q12" style="display:none">
+      <h2>Ekran süreniz?</h2>
+      <div class="choices"><button class="btn">≤2 saat</button><button class="btn">2-4 saat</button><button class="btn">4-6 saat</button><button class="btn">6+ saat</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q13" style="display:none">
+      <h2>Kafein tüketimi?</h2>
+      <div class="choices"><button class="btn">Hemen hemen hiç</button><button class="btn">Günde 1-2</button><button class="btn">Günde 3+</button></div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+
+    <div class="question panel" id="q14" style="display:none">
+      <h2>Hedefiniz nedir?</h2>
+      <div class="choices">
+        <button class="btn" onclick="finish()">Kilo vermek</button>
+        <button class="btn" onclick="finish()">Enerji artırmak</button>
+        <button class="btn" onclick="finish()">Odak geliştirmek</button>
+        <button class="btn" onclick="finish()">Yukarıdakilerin hepsi</button>
+      </div>
+      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="panel">
+    <h2>Teşekkürler!</h2>
+    <p class="muted">Aşağıda kategorilere göre durumunuzu ve kısa önerileri görebilirsiniz.</p>
+
+    <!-- НОВОЕ: прогресс-бары -->
+    <div id="meters" class="meters"></div>
+    <div class="legend">
+      <span class="dot" style="background:var(--critical)"></span> Kırmızı
+      <span class="dot" style="background:var(--warn)"></span> Turuncu
+      <span class="dot" style="background:var(--mid)"></span> Sarı
+      <span class="dot" style="background:var(--ok)"></span> Yeşil
+    </div>
+
+    <div id="riskBox" class="panel" style="margin-top:10px"></div>
+
+    <div class="cta">
+      <h3 class="big">KENDİNİZİN DAHA İYİ VERSİYONU OLMAK İSTER MİSİNİZ?</h3>
+      <h3>SİZİN İÇİN ÖZEL 1 aylık BESLENME PROGRAMINI HAZIRLADIK.</h3>
+      <a href="course.html" class="btn ghost" target="_blank" rel="noopener">Programı İncele</a>
+    </div>
+  </div>
+</div>
+
+<div id="tooltip" class="tooltip"></div>
+
+<script>
+/* ---- SHARE: Web Share + запасные ссылки ---- */
+const shareBtn = document.getElementById('shareBtn');
+const shareBox = document.getElementById('shareBox');
+const shareUrl = location.href.split('#')[0];
+const shareText = "30 Günlük Doğru Beslenme Programı — anketi çöz ve kişisel analizi gör!";
+
+function buildShareFallback(){
+  shareBox.style.display='flex';
+  shareBox.innerHTML = `
+    <a href="https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}" target="_blank" rel="noopener">Telegram</a>
+    <a href="https://wa.me/?text=${encodeURIComponent(shareText+' '+shareUrl)}" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}" target="_blank" rel="noopener">X (Twitter)</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}" target="_blank" rel="noopener">Facebook</a>
+    <a href="mailto:?subject=${encodeURIComponent('30 Günlük Program')}&body=${encodeURIComponent(shareText+' '+shareUrl)}">E-posta</a>
+  `;
+}
+shareBtn?.addEventListener('click', async ()=>{
+  if(navigator.share){
+    try{ await navigator.share({title:document.title, text:shareText, url:shareUrl}); }
+    catch(e){ /* пользователь закрыл — игнор */ }
+  }else{
+    buildShareFallback();
+    shareBox.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+});
+
+/* ---------- 1) Зоны ---------- */
+const POSITIVE_KEYS = ["Uyku","Su","Hareket"];
+const NEGATIVE_KEYS = ["Tatli","Stres","Ekran","Kafein"];
+
+function getCss(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim();}
+const COLORS = { green:getCss('--ok'), yellow:getCss('--mid'), orange:getCss('--warn'), red:getCss('--critical') };
+
+function bandFor(key, value){
+  let band,label;
+  if (POSITIVE_KEYS.includes(key)){
+    if (value < 50){ band='red'; label='çok kötü'; }
+    else if (value < 65){ band='orange'; label='kötü'; }
+    else if (value < 95){ band='yellow'; label='orta'; }
+    else { band='green'; label='iyi'; }
+  } else {
+    if (value >= 85){ band='red'; label='çok kötü'; }
+    else if (value >= 70){ band='orange'; label='kötü'; }
+    else if (value >= 50){ band='yellow'; label='orta'; }
+    else { band='green'; label='iyi'; }
+  }
+  return { band, color: COLORS[band], label };
+}
+
+/* ---------- 2) Баллы ---------- */
+const ANSWER_SCORES = {
+  q3: {"22:00":95,"23:00":85,"00:00":72,"01:00":58,"02:00":45,"03:00":35}, // Uyku başlangıcı
+  q4: {"10 dk":80,"20 dk":70,"30 dk":60,"30+ dk":50},
+  /* q5 удалён */
+  q6: {"Yüksek":80,"Orta":65,"Düşük":50}, // Uykuya katkı
+  q7: {"1 litreden az":35,"1-2 litre":55,"2-3 litre":75,"3+ litre":90}, // Su
+  q8: {"Düşük":35,"Orta":65,"Yüksek":90}, // Hareket
+  q10:{"Neredeyse hiç":85,"Haftada birkaç kez":65,"Her gün":35}, // Tatlı (yüksek = kötü)
+  q11:{"Düşük":85,"Orta":60,"Yüksek":30}, // Stres (yüksek = kötü)
+  q12:{"≤2 saat":85,"2-4 saat":70,"4-6 saat":50,"6+ saat":30}, // Ekran (yüksek = kötü)
+  q13:{"Hemen hemen hiç":85,"Günde 1-2":65,"Günde 3+":40} // Kafein (yüksek = kötü)
+};
+
+const steps=["q1","q2","q3","q4","q6","q7","q8","q9","q10","q11","q12","q13","q14"];
+let idx=0; const answers={};
+
+function startQuiz(){document.getElementById('welcome').style.display='none';document.getElementById('quiz').style.display='block';document.getElementById('progressWrap').style.display='block';show(idx);}
+function show(i){steps.forEach((id,j)=>{const el=document.getElementById(id);if(el)el.style.display=(i===j)?'block':'none';});updateBar();window.scrollTo({top:0,behavior:'smooth'});restoreSelection();}
+function updateBar(){const pct=Math.round((idx/steps.length)*100);document.getElementById('bar').style.width=pct+'%';document.getElementById('pct').textContent=pct+'%';}
+function prev(){if(idx>0){idx--;show(idx);}}
+
+document.addEventListener('click',e=>{
+  if(e.target.matches('.choices .btn') && !e.target.hasAttribute('onclick')){
+    const qEl=e.target.closest('.question'); const qid=qEl.id;
+    answers[qid]=e.target.innerText.trim();
+    qEl.querySelectorAll('.choices .btn').forEach(b=>b.classList.remove('selected'));
+    e.target.classList.add('selected');
+    idx=Math.min(idx+1, steps.length-1); show(idx);
+  }
+});
+function restoreSelection(){
+  const qid=steps[idx], val=answers[qid], qEl=document.getElementById(qid);
+  if(!qEl) return;
+  qEl.querySelectorAll('.choices .btn').forEach(b=>{b.classList.toggle('selected', b.innerText.trim()===val);});
+}
+function finish(){const qEl=document.getElementById(steps[idx]);answers[qEl.id]=event.target.innerText.trim();showResult();}
+
+/* Категориальные баллы */
+function scoreFromAnswers(){
+  const s={ Uyku:50, Su:50, Hareket:50, Tatli:50, Stres:50, Ekran:50, Kafein:50 };
+
+  // Uyku: q3, q4, q6
+  if(answers.q3 && ANSWER_SCORES.q3?.[answers.q3]!==undefined) s.Uyku = ANSWER_SCORES.q3[answers.q3];
+  if(answers.q4 && ANSWER_SCORES.q4?.[answers.q4]!==undefined) s.Uyku = Math.max(s.Uyku, ANSWER_SCORES.q4[answers.q4]);
+  if(answers.q6 && ANSWER_SCORES.q6?.[answers.q6]!==undefined) s.Uyku = Math.max(s.Uyku, ANSWER_SCORES.q6[answers.q6]);
+
+  if(answers.q7 && ANSWER_SCORES.q7?.[answers.q7]!==undefined) s.Su      = ANSWER_SCORES.q7[answers.q7];
+  if(answers.q8 && ANSWER_SCORES.q8?.[answers.q8]!==undefined) s.Hareket = ANSWER_SCORES.q8[answers.q8];
+  if(answers.q10&& ANSWER_SCORES.q10?.[answers.q10]!==undefined) s.Tatli = ANSWER_SCORES.q10[answers.q10];
+  if(answers.q11&& ANSWER_SCORES.q11?.[answers.q11]!==undefined) s.Stres = ANSWER_SCORES.q11[answers.q11];
+  if(answers.q12&& ANSWER_SCORES.q12?.[answers.q12]!==undefined) s.Ekran = ANSWER_SCORES.q12[answers.q12];
+  if(answers.q13&& ANSWER_SCORES.q13?.[answers.q13]!==undefined) s.Kafein= ANSWER_SCORES.q13[answers.q13];
+
+  return s;
+}
+
+/* ---- ПРОГРЕСС-БАРЫ ---- */
+function renderMeters(scores){
+  const container = document.getElementById('meters');
+  container.innerHTML = '';
+  const keys = ["Uyku","Su","Hareket","Tatli","Stres","Ekran","Kafein"];
+
+  keys.forEach(k=>{
+    const val = Math.max(0, Math.min(100, scores[k] ?? 0));
+    const {band, color, label} = bandFor(k, val);
+
+    const card = document.createElement('div');
+    card.className = 'meter-card';
+
+    const head = document.createElement('div');
+    head.className = 'meter-head';
+
+    const title = document.createElement('div');
+    title.className = 'meter-title';
+    title.textContent = k;
+
+    const badge = document.createElement('div');
+    badge.className = 'meter-badge';
+    badge.textContent = `${label.toUpperCase()} • ${val}`;
+
+    head.appendChild(title);
+    head.appendChild(badge);
+
+    const meter = document.createElement('div');
+    meter.className = 'meter';
+
+    const fill = document.createElement('div');
+    fill.className = 'meter-fill';
+    fill.style.background = color;
+    requestAnimationFrame(()=>{ fill.style.width = val + '%'; });
+
+    meter.appendChild(fill);
+
+    card.appendChild(head);
+    card.appendChild(meter);
+    container.appendChild(card);
+  });
+}
+
+/* ---------- 3) Короткие тексты анализа ---------- */
+const TEXTS = {
+  Uyku: {
+    red:    "Düzensiz ve yetersiz uyku; metabolik stres ve odak kaybı riski yüksek. 22:00–23:00 aralığında 7–8 saat hedefleyin, akşam ekranı kapatın.",
+    orange: "Süre az ya da saatler geç; enerji dalgalanması ve tatlı isteği artar. 23:00 hedefi, 15:00 sonrası kafein yok.",
+    yellow: "Ritim kabul edilebilir fakat tutarlılık düşük. Saatleri sabitleyip hafta içi/sonu farkını <1 saatte tutun.",
+    green:  "Düzenli saat ve yeterli süre — iyi gidiyor. Bu ritmi koruyun."
+  },
+  Su: {
+    red:    "Sıvı çok yetersiz; baş ağrısı ve insülin direnci riski. Her öğünde 1 bardak su, gün boyu şişe taşıyın.",
+    orange: "Düşük tüketim; enerji ve cilt kalitesi etkilenir. Günde 6–8 bardak hedefleyin.",
+    yellow: "Yeterli ama düzensiz; sıcak günlerde yetersiz kalabilir. Gün içine eşit dağıtın.",
+    green:  "Dengeli içim; mevcut düzeni koruyun."
+  },
+  Hareket: {
+    red:    "Hareketsiz yaşam; insülin direnci ve kilo artışı riski. Günlük 6–8k adım ve saat başı kısa kalkışlar ekleyin.",
+    orange: "Düşük aktivite; metabolik verim düşer. Her gün 20 dk tempolu yürüyüş.",
+    yellow: "Orta düzey; gelişim sınırlı. Haftada 150 dk orta tempo + 2 gün kuvvet ekleyin.",
+    green:  "Aktif yaşam; sürekliliği корuyun."
+  },
+  Tatli: {
+    red:    "Şeker çok yüksek; yağlanma ve insülin direnci riski. Tatlıyı öğünden sonra küçük porsiyonla sınırlayın.",
+    orange: "Sık atıştırma; enerji dalgalanması yapar. Meyve+yoğurt alternatifini deneyin.",
+    yellow: "Kontrollü tüketim; dengeyi koruyun.",
+    green:  "Nadiren şeker — harika, böyle devam."
+  },
+  Stres: {
+    red:    "Sürekli yüksek stres; uyku bozulur, iştah artar. Günlük 10 dk nefes/meditasyon, akşam ekranı azaltın.",
+    orange: "Uzun süreli gerginlik; tatlı isteği artabilir. 4-7-8 nefes ve kafeini öğleden sonra kesin.",
+    yellow: "Yönetilebilir; yükte artabilir. Kısa molalar ve mini yürüyüşler ekleyin.",
+    green:  "Stres yönetimi iyi — rutini sürdürün."
+  },
+  Ekran: {
+    red:    "6+ saat ekran; uyku ve odak düşer. Her 45 dk 5 dk mola, yatmadan 2 saat önce ekran yok.",
+    orange: "4–6 saat; göz yorgunluğu. Pomodoro 50/10, kısa dış yürüyüş.",
+    yellow: "2–4 saat; artış eğilimine dikkat. Akşam ekran yerine kitap.",
+    green:  "Sınırlı kullanım — iyi, böyle devam."
+  },
+  Kafein: {
+    red:    "Günde 3+ fincan; uyku bozulur. 15:00 sonrası kafein yok, miktarı kademeli azaltın.",
+    orange: "2–3 fincan; uykuyu etkileyebilir. 1–2 fincanla sınırlayın.",
+    yellow: "1–2 fincan; genelde tolere edilir. Erken saatlere çekin, suyu artırın.",
+    green:  "Nadir/hiç — harika, böyle sürdürün."
+  }
+};
+
+function textFor(key, value){
+  const {band,label} = bandFor(key,value);
+  const cls = band==='red'?'red':band==='orange'?'orange':band==='yellow'?'yellow':'green';
+  return `
+    <div class="item">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <strong>${key}</strong>
+        <span class="badge ${cls}">${label.toUpperCase()}</span>
+        <span class="muted">(${value})</span>
+      </div>
+      <div class="hr"></div>
+      <p>${TEXTS[key][band]}</p>
+    </div>`;
+}
+
+function riskAnalysisDetailed(scores){
+  const keys=["Uyku","Su","Hareket","Tatli","Stres","Ekran","Kafein"];
+  const blocks = keys.map(k => textFor(k, scores[k]??0)).join('<div style="height:8px"></div>');
+  const cta = `<div class="hr"></div>
+    <p>Planlı değişim olmadan tablo genelde kötüleşir. Programımız, yukarıdaki maddelere göre tamamen <em>size özel</em> ilerler.</p>`;
+  return "<h3 style='margin:0 0 6px'>Risk Analizi (Kategori Bazında)</h3>" + blocks + cta;
+}
+
+/* ---------- 4) Итог ---------- */
+function showResult(){
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('progressWrap').style.display='none';
+  document.getElementById('result').style.display='block';
+
+  const scores=scoreFromAnswers();
+
+  // новое вместо диаграммы
+  renderMeters(scores);
+
+  document.getElementById('riskBox').innerHTML = riskAnalysisDetailed(scores);
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

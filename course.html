@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1 Aylık Doğru Beslenme Programı</title>
+  <meta name="description" content="1 aylık doğru beslenme programı. Telegram üzerinden kolay kayıt ve ödeme.">
+  <style>
+    :root{
+      --bg:#f5f7f9; --text:#1f2937; --muted:#6b7280;
+      --brand:#22c55e; --brandDark:#16a34a;
+      --card:#4a7856;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.6;background:var(--bg);color:var(--text)}
+    header{background:var(--card);color:#fff;padding:22px;text-align:center;font-size:1.35rem;font-weight:800}
+    section{background:#fff;margin:20px auto;padding:22px;max-width:900px;border-radius:14px;box-shadow:0 8px 24px #0001}
+    h2{margin:0 0 10px;color:var(--card)}
+    ul{padding-left:20px;margin:0}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{background:var(--card);color:#fff;padding:22px;border-radius:16px;text-align:center}
+    .card i{display:block;font-size:26px;margin-bottom:8px}
+    .instructor{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+    .instructor img{width:220px;border-radius:12px}
+    .btn{display:inline-block;margin-top:14px;padding:14px 26px;background:#e63946;color:#fff;border-radius:10px;text-decoration:none;font-weight:800}
+    .btn:hover{background:#c92634}
+    /* --- APPEAR animations --- */
+    .reveal{opacity:0;transform:translateY(22px) scale(.98);transition:opacity .6s ease, transform .6s ease}
+    .reveal.show{opacity:1;transform:translateY(0) scale(1)}
+    .stagger .card{opacity:0;transform:translateY(22px);transition:opacity .5s ease, transform .5s ease}
+    .stagger.show .card{opacity:1;transform:translateY(0)}
+    .stagger.show .card:nth-child(1){transition-delay:.05s}
+    .stagger.show .card:nth-child(2){transition-delay:.15s}
+    .stagger.show .card:nth-child(3){transition-delay:.25s}
+    @media (prefers-reduced-motion:reduce){
+      .reveal,.stagger .card{opacity:1 !important;transform:none !important;transition:none !important}
+    }
+  </style>
+</head>
+<body>
+
+<header class="reveal">
+  1 Aylık Doğru Beslenme Programı
+</header>
+
+<!-- KURS SENİN İÇİN -->
+<section class="reveal">
+  <h2>Kurs Senin İçin, Eğer...</h2>
+  <ul>
+    <li>Sürekli şişkinlik, ödem ve kabızlık yaşıyorsan.</li>
+    <li>Cildin akne, döküntü, mantar veya tahrişten yorulduysa.</li>
+    <li>Kendini halsiz, kaygılı hissediyor ve odaklanmakta zorlanıyorsan.</li>
+    <li>Değişmek istiyorsun ama nereden başlayacağını bilmiyorsan.</li>
+  </ul>
+</section>
+
+<!-- KURS İÇERİĞİ -->
+<section class="reveal">
+  <h2>Kurs İçeriği</h2>
+  <div class="cards stagger">
+    <div class="card"><i>📄</i>Metin materyalleri (PDF, rehberler, kontrol listeleri)</div>
+    <div class="card"><i>🎬</i>Kısa ve Faydalı Videolar</div>
+    <div class="card"><i>🎥</i>Zoom buluşmaları</div>
+  </div>
+</section>
+
+<!-- KURS SONRASINDA SEN -->
+<section class="reveal" style="background:#f1f5f9">
+  <h2>Kurs Sonrasında Sen</h2>
+  <ul>
+    <li><strong>Karında hafiflik hissedeceksin</strong> — şişkinlik, ödem ve kabızlık olmadan.</li>
+    <li><strong>Cildinin temizlendiğini göreceksin</strong> — akne, döküntü ve tahriş azalacak.</li>
+    <li><strong>Enerji ile uyanacaksın</strong> — zihnin berrak, odak ve motivasyon yüksek olacak.</li>
+    <li><strong>Vücuttaki iltihap azalacak</strong>, sindirimin iyileşecek ve bağışıklığın güçlenecek.</li>
+  </ul>
+</section>
+
+<!-- EĞİTMEN HAKKINDA -->
+<section class="reveal">
+  <h2>Eğitmen Hakkında</h2>
+  <div class="instructor">
+    <!-- kendi fotoğrafını egitmen.jpg adıyla koy -->
+    <img src="egitmen.jpg" alt="Zılola Alladusova">
+    <div>
+      <h3><strong>Zılola Alladusova</strong></h3>
+      <p>🎓 Ukrayna Devletinin Sumı Devlet Üniversitesi Kimya-Biyokimya mezunu.</p>
+      <p>📚 Ukrayna’da Uluslararası Diyetoloji ve Nütrisyon Okulu mezunu.</p>
+      <p>💡 <strong>Expert_Nutrition</strong> sertifikalı uzman.</p>
+      <p>🌍 United Association UAAK of Applied Kinesiology üyesi.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ÖDEME / TELEGRAM -->
+<section class="reveal" style="text-align:center">
+  <h2>Kursa Katıl</h2>
+  <p>Kaydını kolayca Telegram üzerinden yapabilir ve ödeme bilgilerini alabilirsin.</p>
+  <!-- BOT kullanıcı adını değiştir -->
+  <a href="https://t.me/YOUR_BOT_USERNAME" class="btn">Telegram'dan Kayıt Ol</a>
+</section>
+
+<script>
+  // IntersectionObserver ile görünümdeyken sınıf ekleyip animasyon oynatıyoruz
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('show');
+        // tekrar tekrar tetiklememek için gözlemden çıkar
+        io.unobserve(e.target);
+      }
+    })
+  }, {threshold: .15});
+
+  document.querySelectorAll('.reveal, .stagger').forEach(el=>io.observe(el));
+
+  // Stagger kapsayıcısı görünür olduğunda .show ekleniyor (tek seferlik)
+  const stacks = document.querySelectorAll('.stagger');
+  const so = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('show'); so.unobserve(e.target); }
+    })
+  }, {threshold:.15});
+  stacks.forEach(el=>so.observe(el));
+</script>
+</body>
+</html>
