@@ -38,6 +38,39 @@
   </style>
 </head>
 <body>
+  <script>
+  (function() {
+    const BOT = "health_yasham_bot";
+    const START = "from_site_v2"; // кэш-байпас
+
+    // 1) Жёстко переписываем ВСЕ t.me ссылки
+    document.querySelectorAll('a[href*="t.me/"]').forEach(a => {
+      a.href = `https://t.me/${BOT}?start=${encodeURIComponent(START)}`;
+      a.setAttribute('rel','noopener noreferrer');
+
+      // 2) Мобильный deep-link: tg://resolve
+      a.addEventListener('click', function(e){
+        // если устройство мобильное — пробуем tg://
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) {
+          const tg = `tg://resolve?domain=${BOT}&start=${encodeURIComponent(START)}`;
+          // пробуем открыть tg://, а через 300 мс откроем https как запасной вариант
+          const timer = setTimeout(()=>{ location.href = a.href; }, 300);
+          location.href = tg;
+          e.preventDefault();
+        }
+      }, {passive:false});
+    });
+
+    // 3) На всякий: если есть конкретная кнопка — прописываем туда тоже
+    const btn = document.querySelector('a.btn[href*="t.me/"], a.btn[href*="tg://"], a.btn[href^="#telegram"]');
+    if (btn) btn.href = `https://t.me/${BOT}?start=${encodeURIComponent(START)}`;
+
+    // 4) Диагностика в консоль — чтобы проверить, что всё ок
+    console.log('[bot-link-fix] all t.me links ->', `https://t.me/${BOT}?start=${START}`);
+  })();
+</script>
+
 
 <header class="reveal">
   1 Aylık Doğru Beslenme Programı
@@ -124,5 +157,6 @@
 </script>
 </body>
 </html>
+
 
 
