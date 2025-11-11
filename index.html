@@ -9,7 +9,7 @@
 :root{
   --bg1:#fbfeff; --bg2:#f6fbff; --bg3:#fff8f4;
   --panel:#ffffff; --text:#0f172a; --muted:#6b7280; --line:#e5e7eb;
-  --ok:#22c55e; --warn:#f59e0b; --critical:#ef4444; --mid:#eab308;
+  --ok:#22c55e; --mid:#eab308; --critical:#ef4444;
   --brand:#22c55e; --brandHover:#16a34a;
   --radius:14px; --btnRadius:999px; --container:940px; --shadow:0 8px 24px #0002;
 }
@@ -25,7 +25,7 @@ body{
 h1{margin:0 0 12px;text-align:center}
 h2{margin:0 0 10px}
 .muted{color:var(--muted)}
-.lead{font-size:20px; line-height:1.5}               /* ↑ крупнее приветственный текст */
+.lead{font-size:20px; line-height:1.5}
 .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
 img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
 .question{margin:18px 0}
@@ -34,13 +34,13 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
 .btn:hover{background:var(--brandHover)}
 .btn.ghost{background:var(--line);color:var(--text)}
 .btn.selected{outline:2px solid #16a34a;background:#16a34a}
-.btn-lg{padding:16px 22px; font-size:18px}           /* ↑ большая кнопка Başla */
+.btn-lg{padding:16px 22px; font-size:18px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
 .progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:16px 0}
 .bar{height:100%;width:0;background:linear-gradient(90deg,#22c55e,#86efac)}
 #quiz{display:none} #result{display:none}
 
-/* === ПРОГРЕСС-БАРЫ вместо диаграммы === */
+/* ---- Итоговые индикаторы ---- */
 .meters{display:grid;gap:12px;margin:12px 0}
 .meter-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
 .meter-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
@@ -50,7 +50,7 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
 .meter-fill{height:100%;width:0%;border-radius:999px;transition:width .5s ease}
 .meter-note{font-size:12px;color:var(--muted);margin-top:6px}
 
-/* легенда (простая) */
+/* легенда — 3 цвета // CHANGED */
 .legend{display:flex;gap:12px;align-items:center;justify-content:center;font-size:12px;color:var(--muted);margin-top:8px}
 .dot{width:10px;height:10px;border-radius:50%}
 
@@ -60,7 +60,6 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
 .note{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
 .badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
 .badge.red{background:#fee2e2;color:#991b1b}
-.badge.orange{background:#ffedd5;color:#9a3412}
 .badge.yellow{background:#fef9c3;color:#854d0e}
 .badge.green{background:#dcfce7;color:#166534}
 .hr{height:1px;background:var(--line);margin:10px 0}
@@ -77,15 +76,10 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
     <img src="hero.png" alt="Eğitmen" class="hero">
     <p class="muted lead">Kısa sorularla sizin için ideal günlük rutini oluşturalım.</p>
 
-    <!-- Большая кнопка -->
     <button class="btn btn-lg" onclick="startQuiz()">Başla</button>
 
-    <!-- Вторая строка: Telegram + Paylaş -->
     <div class="row2">
-      <a class="btn ghost"
-         href="https://t.me/health_yasham_bot?start=from_site_home"
-         target="_blank" rel="noopener">Telegram’da kayıt ve ödeme</a>
-
+      <a class="btn ghost" href="https://t.me/health_yasham_bot?start=from_site_home" target="_blank" rel="noopener">Telegram’da kayıt ve ödeme</a>
       <button id="shareBtn" class="btn ghost" type="button">Paylaş</button>
     </div>
     <div id="shareBox" class="share-list" style="display:none"></div>
@@ -116,13 +110,7 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
       <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
     </div>
 
-    <div class="question panel" id="q4" style="display:none">
-      <h2>Sabah kalkma süreniz?</h2>
-      <div class="choices"><button class="btn">10 dk</button><button class="btn">20 dk</button><button class="btn">30 dk</button><button class="btn">30+ dk</button></div>
-      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
-    </div>
-
-    <!-- q5 УДАЛЕН -->
+    <!-- q4 УДАЛЁН // CHANGED -->
 
     <div class="question panel" id="q6" style="display:none">
       <h2>Enerji durumunuz?</h2>
@@ -130,11 +118,7 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
       <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
     </div>
 
-    <div class="question panel" id="q7" style="display:none">
-      <h2>Su tüketiminiz?</h2>
-      <div class="choices"><button class="btn">1 litreden az</button><button class="btn">1-2 litre</button><button class="btn">2-3 litre</button><button class="btn">3+ litre</button></div>
-      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
-    </div>
+    <!-- q7 УДАЛЁН (Su) // CHANGED -->
 
     <div class="question panel" id="q8" style="display:none">
       <h2>Hareket düzeyiniz?</h2>
@@ -143,16 +127,13 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
     </div>
 
     <div class="question panel" id="q9" style="display:none">
-      <h2>Öğün sayınız?</h2>
-      <div class="choices"><button class="btn">2 öğün</button><button class="btn">3 öğün</button><button class="btn">4+ öğün</button></div>
+      <!-- ВМЕСТО Öğün sayınız? // CHANGED -->
+      <h2>Gün içinde ara öğün (atıştırma) var mı?</h2>
+      <div class="choices"><button class="btn">Evet</button><button class="btn">Hayır</button></div>
       <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
     </div>
 
-    <div class="question panel" id="q10" style="display:none">
-      <h2>Tatlı/atıştırmalık?</h2>
-      <div class="choices"><button class="btn">Neredeyse hiç</button><button class="btn">Haftada birkaç kez</button><button class="btn">Her gün</button></div>
-      <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
-    </div>
+    <!-- q10 УДАЛЁН (Tatlı) // CHANGED -->
 
     <div class="question panel" id="q11" style="display:none">
       <h2>Stres seviyeniz?</h2>
@@ -162,7 +143,8 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
 
     <div class="question panel" id="q12" style="display:none">
       <h2>Ekran süreniz?</h2>
-      <div class="choices"><button class="btn">≤2 saat</button><button class="btn">2-4 saat</button><button class="btn">4-6 saat</button><button class="btn">6+ saat</button></div>
+      <!-- ответы переработаны // CHANGED -->
+      <div class="choices"><button class="btn">≤4 saat</button><button class="btn">4-6 saat</button><button class="btn">6+ saat</button></div>
       <div class="navline"><button class="btn ghost" onclick="prev()">Geri</button></div>
     </div>
 
@@ -189,11 +171,10 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
     <h2>Teşekkürler!</h2>
     <p class="muted">Aşağıda kategorilere göre durumunuzu ve kısa önerileri görebilirsiniz.</p>
 
-    <!-- НОВОЕ: прогресс-бары -->
     <div id="meters" class="meters"></div>
+    <!-- легенда на 3 цвета // CHANGED -->
     <div class="legend">
       <span class="dot" style="background:var(--critical)"></span> Kırmızı
-      <span class="dot" style="background:var(--warn)"></span> Turuncu
       <span class="dot" style="background:var(--mid)"></span> Sarı
       <span class="dot" style="background:var(--ok)"></span> Yeşil
     </div>
@@ -211,12 +192,11 @@ img.hero{width:100%;border-radius:var(--radius);margin:8px 0 12px}
 <div id="tooltip" class="tooltip"></div>
 
 <script>
-/* ---- SHARE: Web Share + запасные ссылки ---- */
+/* ---- SHARE ---- */
 const shareBtn = document.getElementById('shareBtn');
 const shareBox = document.getElementById('shareBox');
 const shareUrl = location.href.split('#')[0];
 const shareText = "30 Günlük Doğru Beslenme Programı — anketi çöz ve kişisel analizi gör!";
-
 function buildShareFallback(){
   shareBox.style.display='flex';
   shareBox.innerHTML = `
@@ -229,52 +209,50 @@ function buildShareFallback(){
 }
 shareBtn?.addEventListener('click', async ()=>{
   if(navigator.share){
-    try{ await navigator.share({title:document.title, text:shareText, url:shareUrl}); }
-    catch(e){ /* пользователь закрыл — игнор */ }
-  }else{
-    buildShareFallback();
-    shareBox.scrollIntoView({behavior:'smooth',block:'start'});
-  }
+    try{ await navigator.share({title:document.title, text:shareText, url:shareUrl}); }catch(e){}
+  }else{ buildShareFallback(); shareBox.scrollIntoView({behavior:'smooth',block:'start'}); }
 });
 
-/* ---------- 1) Зоны ---------- */
-const POSITIVE_KEYS = ["Uyku","Su","Hareket"];
-const NEGATIVE_KEYS = ["Tatli","Stres","Ekran","Kafein"];
-
+/* ---------- Цвета ---------- */
 function getCss(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim();}
-const COLORS = { green:getCss('--ok'), yellow:getCss('--mid'), orange:getCss('--warn'), red:getCss('--critical') };
+const COLORS = { green:getCss('--ok'), yellow:getCss('--mid'), red:getCss('--critical') };
 
-function bandFor(key, value){
-  let band,label;
-  if (POSITIVE_KEYS.includes(key)){
-    if (value < 50){ band='red'; label='çok kötü'; }
-    else if (value < 65){ band='orange'; label='kötü'; }
-    else if (value < 95){ band='yellow'; label='orta'; }
-    else { band='green'; label='iyi'; }
-  } else {
-    if (value >= 85){ band='red'; label='çok kötü'; }
-    else if (value >= 70){ band='orange'; label='kötü'; }
-    else if (value >= 50){ band='yellow'; label='orta'; }
-    else { band='green'; label='iyi'; }
-  }
-  return { band, color: COLORS[band], label };
+/* ---------- Границы 3-цветной шкалы (для всех категорий одинаковые) // CHANGED
+   value = 0..100, чем больше — тем лучше
+   0..49 = красный, 50..79 = жёлтый, 80..100 = зелёный
+*/
+function bandFor(value){
+  if(value < 50) return {band:'red', color:COLORS.red,  label:'kötü'};
+  if(value < 80) return {band:'yellow', color:COLORS.yellow, label:'orta'};
+  return {band:'green', color:COLORS.green, label:'iyi'};
 }
 
-/* ---------- 2) Баллы ---------- */
+/* ---------- Баллы ответов (все: БОЛЬШЕ = ЛУЧШЕ) // CHANGED ---------- */
 const ANSWER_SCORES = {
-  q3: {"22:00":95,"23:00":85,"00:00":72,"01:00":58,"02:00":45,"03:00":35}, // Uyku başlangıcı
-  q4: {"10 dk":80,"20 dk":70,"30 dk":60,"30+ dk":50},
-  /* q5 удалён */
-  q6: {"Yüksek":80,"Orta":65,"Düşük":50}, // Uykuya katkı
-  q7: {"1 litreden az":35,"1-2 litre":55,"2-3 litre":75,"3+ litre":90}, // Su
-  q8: {"Düşük":35,"Orta":65,"Yüksek":90}, // Hareket
-  q10:{"Neredeyse hiç":85,"Haftada birkaç kez":65,"Her gün":35}, // Tatlı (yüksek = kötü)
-  q11:{"Düşük":85,"Orta":60,"Yüksek":30}, // Stres (yüksek = kötü)
-  q12:{"≤2 saat":85,"2-4 saat":70,"4-6 saat":50,"6+ saat":30}, // Ekran (yüksek = kötü)
-  q13:{"Hemen hemen hiç":85,"Günde 1-2":65,"Günde 3+":40} // Kafein (yüksek = kötü)
+  // Uyku saati — по твоим описаниям
+  q3: {"22:00":100,"23:00":85,"00:00":60,"01:00":40,"02:00":20,"03:00":10},
+
+  // Enerji
+  q6: {"Yüksek":90,"Orta":65,"Düşük":40},
+
+  // Hareket
+  q8: {"Düşük":35,"Orta":65,"Yüksek":90},
+
+  // Ara öğün (перекусы) — «Hayır» хорошо
+  q9: {"Evet":35,"Hayır":85},
+
+  // Stres — «Düşük» хорошо
+  q11:{"Düşük":90,"Orta":60,"Yüksek":30},
+
+  // Ekran — новые опции
+  q12:{"≤4 saat":85,"4-6 saat":60,"6+ saat":30},
+
+  // Kafein
+  q13:{"Hemen hemen hiç":85,"Günde 1-2":70,"Günde 3+":35}
 };
 
-const steps=["q1","q2","q3","q4","q6","q7","q8","q9","q10","q11","q12","q13","q14"];
+/* ---------- Шаги (удалены q4, q7, q10) // CHANGED ---------- */
+const steps=["q1","q2","q3","q6","q8","q9","q11","q12","q13","q14"];
 let idx=0; const answers={};
 
 function startQuiz(){document.getElementById('welcome').style.display='none';document.getElementById('quiz').style.display='block';document.getElementById('progressWrap').style.display='block';show(idx);}
@@ -298,34 +276,36 @@ function restoreSelection(){
 }
 function finish(){const qEl=document.getElementById(steps[idx]);answers[qEl.id]=event.target.innerText.trim();showResult();}
 
-/* Категориальные баллы */
+/* ---------- Счёт категорий (все — «чем больше, тем лучше») // CHANGED ---------- */
 function scoreFromAnswers(){
-  const s={ Uyku:50, Su:50, Hareket:50, Tatli:50, Stres:50, Ekran:50, Kafein:50 };
+  const s={ Uyku:50, Enerji:50, Hareket:50, AraÖğün:50, Stres:50, Ekran:50, Kafein:50 };
 
-  // Uyku: q3, q4, q6
-  if(answers.q3 && ANSWER_SCORES.q3?.[answers.q3]!==undefined) s.Uyku = ANSWER_SCORES.q3[answers.q3];
-  if(answers.q4 && ANSWER_SCORES.q4?.[answers.q4]!==undefined) s.Uyku = Math.max(s.Uyku, ANSWER_SCORES.q4[answers.q4]);
-  if(answers.q6 && ANSWER_SCORES.q6?.[answers.q6]!==undefined) s.Uyku = Math.max(s.Uyku, ANSWER_SCORES.q6[answers.q6]);
+  if(answers.q3) s.Uyku   = ANSWER_SCORES.q3[answers.q3] ?? s.Uyku;
+  if(answers.q6) s.Enerji = ANSWER_SCORES.q6[answers.q6] ?? s.Enerji;
+  if(answers.q8) s.Hareket= ANSWER_SCORES.q8[answers.q8] ?? s.Hareket;
+  if(answers.q9) s.AraÖğün= ANSWER_SCORES.q9[answers.q9] ?? s.AraÖğün;
+  if(answers.q11) s.Stres = ANSWER_SCORES.q11[answers.q11] ?? s.Stres;
+  if(answers.q12) s.Ekran = ANSWER_SCORES.q12[answers.q12] ?? s.Ekran;
+  if(answers.q13) s.Kafein= ANSWER_SCORES.q13[answers.q13] ?? s.Kafein;
 
-  if(answers.q7 && ANSWER_SCORES.q7?.[answers.q7]!==undefined) s.Su      = ANSWER_SCORES.q7[answers.q7];
-  if(answers.q8 && ANSWER_SCORES.q8?.[answers.q8]!==undefined) s.Hareket = ANSWER_SCORES.q8[answers.q8];
-  if(answers.q10&& ANSWER_SCORES.q10?.[answers.q10]!==undefined) s.Tatli = ANSWER_SCORES.q10[answers.q10];
-  if(answers.q11&& ANSWER_SCORES.q11?.[answers.q11]!==undefined) s.Stres = ANSWER_SCORES.q11[answers.q11];
-  if(answers.q12&& ANSWER_SCORES.q12?.[answers.q12]!==undefined) s.Ekran = ANSWER_SCORES.q12[answers.q12];
-  if(answers.q13&& ANSWER_SCORES.q13?.[answers.q13]!==undefined) s.Kafein= ANSWER_SCORES.q13[answers.q13];
+  // Небольшие зависимости от стресса (по твоим пояснениям) // CHANGED
+  if(s.Stres <= 60){ // Orta/Yüksek: ухудшаем «косвенные»
+    if(answers.q12 === "≤4 saat") s.Ekran = Math.min(s.Ekran, 70); // несмотря на мало экрана — хронический стресс
+    if(answers.q13 !== "Günde 3+") s.Kafein = Math.min(s.Kafein, 70); // мало кофе, но стресс есть
+  }
 
   return s;
 }
 
-/* ---- ПРОГРЕСС-БАРЫ ---- */
+/* ---- Индикаторы ---- */
 function renderMeters(scores){
   const container = document.getElementById('meters');
   container.innerHTML = '';
-  const keys = ["Uyku","Su","Hareket","Tatli","Stres","Ekran","Kafein"];
+  const keys = ["Uyku","Enerji","Hareket","AraÖğün","Stres","Ekran","Kafein"]; // CHANGED
 
   keys.forEach(k=>{
     const val = Math.max(0, Math.min(100, scores[k] ?? 0));
-    const {band, color, label} = bandFor(k, val);
+    const {band, color, label} = bandFor(val);
 
     const card = document.createElement('div');
     card.className = 'meter-card';
@@ -360,55 +340,59 @@ function renderMeters(scores){
   });
 }
 
-/* ---------- 3) Короткие тексты анализа ---------- */
+/* ---------- Тексты анализа (переписаны под твои объяснения) // CHANGED ---------- */
 const TEXTS = {
   Uyku: {
-    red:    "Düzensiz ve yetersiz uyku; metabolik stres ve odak kaybı riski yüksek. 22:00–23:00 aralığında 7–8 saat hedefleyin, akşam ekranı kapatın.",
-    orange: "Süre az ya da saatler geç; enerji dalgalanması ve tatlı isteği artar. 23:00 hedefi, 15:00 sonrası kafein yok.",
-    yellow: "Ritim kabul edilebilir fakat tutarlılık düşük. Saatleri sabitleyip hafta içi/sonu farkını <1 saatte tutun.",
-    green:  "Düzenli saat ve yeterli süre — iyi gidiyor. Bu ritmi koruyun."
+    red:    "Gece geç yatış; kortizol yüksek, büyüme hormonu ve hipofiz ekseni olumsuz etkilenebilir. 22:00–23:00 hedefleyin.",
+    yellow: "Saat geçe kayıyor. 23:00’e çekmek, mavi ışığı azaltmak ve ritmi sabitlemek iyi olur.",
+    green:  "22:00–23:00 aralığı harika; sinir sistemi için koruyucu. Böyle sürdürün."
   },
-  Su: {
-    red:    "Sıvı çok yetersiz; baş ağrısı ve insülin direnci riski. Her öğünde 1 bardak su, gün boyu şişe taşıyın.",
-    orange: "Düşük tüketim; enerji ve cilt kalitesi etkilenir. Günde 6–8 bardak hedefleyin.",
-    yellow: "Yeterli ama düzensiz; sıcak günlerde yetersiz kalabilir. Gün içine eşit dağıtın.",
-    green:  "Dengeli içim; mevcut düzeni koruyun."
+  Enerji: {
+    red:    "Düşük enerji — karaciğer yükü ve böbrek zayıflığı olası. Hafif yürüyüş ve temel destekleri planlayın.",
+    yellow: "Orta enerji — vitamin/mineral eksikleri olası. Düzen, uyku ve besin yoğunluğu önemli.",
+    green:  "Yüksek enerji — genel iyilik hâli iyi. Mevcut düzeni koruyun."
   },
   Hareket: {
-    red:    "Hareketsiz yaşam; insülin direnci ve kilo artışı riski. Günlük 6–8k adım ve saat başı kısa kalkışlar ekleyin.",
-    orange: "Düşük aktivite; metabolik verim düşer. Her gün 20 dk tempolu yürüyüş.",
-    yellow: "Orta düzey; gelişim sınırlı. Haftada 150 dk orta tempo + 2 gün kuvvet ekleyin.",
-    green:  "Aktif yaşam; sürekliliği корuyun."
+    red:    "Düşük aktivite; damar içi pıhtı, karaciğer yağlanması, visseral yağ ve eklem sorunları riski.",
+    yellow: "Orta; selülit ve kas zayıflıkları görülebilir. Kuvvet + mobilite ekleyin.",
+    green:  "Yüksek; boşaltım sistemleri ve genel metabolizma daha verimli çalışır."
   },
-  Tatli: {
-    red:    "Şeker çok yüksek; yağlanma ve insülin direnci riski. Tatlıyı öğünden sonra küçük porsiyonla sınırlayın.",
-    orange: "Sık atıştırma; enerji dalgalanması yapar. Meyve+yoğurt alternatifini deneyin.",
-    yellow: "Kontrollü tüketim; dengeyi koruyun.",
-    green:  "Nadiren şeker — harika, böyle devam."
+  AraÖğün: {
+    red:    "Gün içinde sık atıştırma; insülin direnci, Tip 2 diyabet riski, gaz/şişkinlik ve gece tuvalete kalkma görülebilir.",
+    yellow: "Bazen atıştırma; sindirim dalgalanabilir. Öğün bütünlüğünü artırın.",
+    green:  "Ara öğün yok; sindirim daha sakin, şişkinlik riski düşük."
   },
   Stres: {
-    red:    "Sürekli yüksek stres; uyku bozulur, iştah artar. Günlük 10 dk nefes/meditasyon, akşam ekranı azaltın.",
-    orange: "Uzun süreli gerginlik; tatlı isteği artabilir. 4-7-8 nefes ve kafeini öğleden sonra kesin.",
-    yellow: "Yönetilebilir; yükte artabilir. Kısa molalar ve mini yürüyüşler ekleyin.",
-    green:  "Stres yönetimi iyi — rutini sürdürün."
+    red:    "Yüksek stres; kortizol artışı, adrenal yorgunluk, kabızlık, uyku ve tiroid sorunları görülebilir.",
+    yellow: "Orta stres; GİS şikâyetleri, safra stazı ve uyku bozulmaları gelişebilir.",
+    green:  "Düşük stres; otonom sinir sistemi dengeli. Organ durumu iyi olsa da düzeni sürdürmek gerek."
   },
   Ekran: {
-    red:    "6+ saat ekran; uyku ve odak düşer. Her 45 dk 5 dk mola, yatmadan 2 saat önce ekran yok.",
-    orange: "4–6 saat; göz yorgunluğu. Pomodoro 50/10, kısa dış yürüyüş.",
-    yellow: "2–4 saat; artış eğilimine dikkat. Akşam ekran yerine kitap.",
-    green:  "Sınırlı kullanım — iyi, böyle devam."
+    red:    "6+ saat: GİS ve eklem sorunları, boyun kas spazmı ve uyku bozulması riski.",
+    yellow: "4–6 saat: Bazı kas zayıflıkları ve servikal spazm görülebilir.",
+    green:  "≤4 saat: Genel olarak iyi; ancak stres yüksekse kronik yük devam eder."
   },
   Kafein: {
-    red:    "Günde 3+ fincan; uyku bozulur. 15:00 sonrası kafein yok, miktarı kademeli azaltın.",
-    orange: "2–3 fincan; uykuyu etkileyebilir. 1–2 fincanla sınırlayın.",
-    yellow: "1–2 fincan; genelde tolere edilir. Erken saatlere çekin, suyu artırın.",
-    green:  "Nadir/hiç — harika, böyle sürdürün."
+    red:    "Günde 3+: Belirgin kronik stres, mineral eksikliği, zayıf adrenaller ve kötü uyku olası.",
+    yellow: "Günde 1–2: Çoğu için tolere edilebilir; stres yüksekse kronik yük devam eder.",
+    green:  "Neredeyse hiç: Genel olarak iyi; stres yüksekse kronik yük yine sürebilir."
   }
 };
 
+/* контекстные ремарки к Ekran/Kafein при высоком стрессе // CHANGED */
+function withStressNotes(key, baseText, scores, answers){
+  const stress = answers.q11;
+  if((key==="Ekran" || key==="Kafein") && (stress==="Orta" || stress==="Yüksek")){
+    return baseText + " <br><em>Not:</em> Stres seviyeniz " + stress + " olduğu için kronik stres yükü devam ediyor.";
+  }
+  return baseText;
+}
+
 function textFor(key, value){
-  const {band,label} = bandFor(key,value);
-  const cls = band==='red'?'red':band==='orange'?'orange':band==='yellow'?'yellow':'green';
+  const {band,label} = bandFor(value);
+  const cls = band==='red'?'red':band==='yellow'?'yellow':'green';
+  let t = TEXTS[key][band];
+  t = withStressNotes(key, t, scoreFromAnswers(), answers);
   return `
     <div class="item">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -417,34 +401,32 @@ function textFor(key, value){
         <span class="muted">(${value})</span>
       </div>
       <div class="hr"></div>
-      <p>${TEXTS[key][band]}</p>
+      <p>${t}</p>
     </div>`;
 }
 
 function riskAnalysisDetailed(scores){
-  const keys=["Uyku","Su","Hareket","Tatli","Stres","Ekran","Kafein"];
+  const keys=["Uyku","Enerji","Hareket","AraÖğün","Stres","Ekran","Kafein"];
   const blocks = keys.map(k => textFor(k, scores[k]??0)).join('<div style="height:8px"></div>');
   const cta = `<div class="hr"></div>
-    <p>Planlı değişim olmadan tablo genelde kötüleşir. Programımız, yukarıdaki maddelere göre tamamen <em>size özel</em> ilerler.</p>`;
+    <p>Yukarıdaki maddelere göre size özel plan aşamalı ve sürdürülebilir değişim önerir.</p>`;
   return "<h3 style='margin:0 0 6px'>Risk Analizi (Kategori Bazında)</h3>" + blocks + cta;
 }
 
-/* ---------- 4) Итог ---------- */
+/* ---------- Итог ---------- */
 function showResult(){
   document.getElementById('quiz').style.display='none';
   document.getElementById('progressWrap').style.display='none';
   document.getElementById('result').style.display='block';
 
   const scores=scoreFromAnswers();
-
-  // новое вместо диаграммы
   renderMeters(scores);
-
   document.getElementById('riskBox').innerHTML = riskAnalysisDetailed(scores);
-
   window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
+
+<!-- Короткий дисклеймер — информационные цели -->
+<div class="note">Bu içerik yalnızca bilgilendirme amaçlıdır ve tıbbi tavsiye değildir.</div>
 </body>
 </html>
-
